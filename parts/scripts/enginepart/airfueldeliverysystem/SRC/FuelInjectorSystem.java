@@ -80,17 +80,22 @@ public class FuelInjectorSystem extends AirFuelDeliverySystem
 
 	public void buildTuningMenu( Menu m )
 	{
-		String[] fuelTypes = new String[4];
+		String[] fuelTypes = new String[6];
 
 		fuelTypes[0] = "95 octane pump gas";
 		fuelTypes[1] = "98 octane pump gas";
 		fuelTypes[2] = "100 octane premium pump gas";
-		fuelTypes[3] = "112 octane racing methanol";
+		fuelTypes[3] = "ethanol E85";
+		fuelTypes[4] = "112 octane racing methanol";
+		fuelTypes[5] = "diesel";
 
 		old_mixture_ratio = mixture_ratio;
 		m.addItem( "Mixture ratio",		1, mixture_ratio, 8.0, 20.0, 49, null ).printValue("   %1.2f:1 A/F");
-		old_fuel_type = fuel_type;
-//		m.addItem( "Fuel type",			2, fuel_type, fuelTypes, null );
+		if(Player.c_garage)
+		{
+			old_fuel_type = fuel_type;
+			m.addItem( "Fuel type",			2, fuel_type, fuelTypes, null );
+		}
 	}
 
 	public void endTuningSession( int cancelled )

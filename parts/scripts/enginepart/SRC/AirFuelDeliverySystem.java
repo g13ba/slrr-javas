@@ -16,9 +16,9 @@ public class AirFuelDeliverySystem extends EnginePart
 	static int	FT_GAS_95	= 0;
 	static int	FT_GAS_98	= 1;
 	static int	FT_GAS_100	= 2;
-	static int	FT_METHANOL	= 3;
-	static int	FT_DIESEL	= 4;
-
+	static int	FT_E85		= 3;
+	static int	FT_METHANOL	= 4;
+	static int	FT_DIESEL	= 5;
 	// input //
 	float	mixture_ratio		= 1.0;
 	float	optimal_mixture_ratio	= 1.0;
@@ -56,16 +56,19 @@ public class AirFuelDeliverySystem extends EnginePart
 	public void calcStuffs()
 	{
 		if (fuel_type == FT_GAS_98)
-			optimal_mixture_ratio = 13.5/1.0;
+			optimal_mixture_ratio = 12.5/1.0;
 		else
 		if (fuel_type == FT_GAS_100)
-			optimal_mixture_ratio = 14.0/1.0;
+			optimal_mixture_ratio = 12.5/1.0;
+		else
+		if (fuel_type == FT_E85)
+			optimal_mixture_ratio = 14.75/1.0;
 		else
 		if (fuel_type == FT_METHANOL)
-			optimal_mixture_ratio = 16.0/1.0;
+			optimal_mixture_ratio = 11.0/1.0;
 		else
 		if (fuel_type == FT_DIESEL)
-			optimal_mixture_ratio = 11.0/1.0;
+			optimal_mixture_ratio = 14.5/1.0;
 		else
 			optimal_mixture_ratio = 12.5/1.0; // FT_GAS_95 //
 	}
@@ -87,41 +90,62 @@ public class AirFuelDeliverySystem extends EnginePart
 			optimal_mixture_ratio = 12.5/1.0;
 			optimal_burn_time_base	= 0.00250;
 			optimal_burn_time_offset= 0.00080;
+			minComp = 6.5;
+			maxComp = 14.5;
 
 		if (ft == FT_GAS_98)
 		{
 //			System.log("  fuel type: 98 octane pump gas");
-			H = 1100000.0;
-			optimal_mixture_ratio = 13.5/1.0;
+			H = 1121490.0;
+			optimal_mixture_ratio = 12.5/1.0;
 			optimal_burn_time_base	= 0.00247;
 			optimal_burn_time_offset= 0.00075;
+			minComp = 6.5;
+			maxComp = 15.0;
 		}
 		else
 		if (ft == FT_GAS_100)
 		{
 //			System.log("  fuel type: 100 octane premium gas");
-			H = 1100250.0;
-			optimal_mixture_ratio = 14.0/1.0;
+			H = 1154475.0;
+			optimal_mixture_ratio = 12.5/1.0;
 			optimal_burn_time_base	= 0.00242;
 			optimal_burn_time_offset= 0.00065;
+			minComp = 6.5;
+			maxComp = 15.5;
+		}
+		else
+		if (ft == FT_E85)
+		{
+//			System.log("  fuel type: E85 ethanol");
+			H = 1380000.0;
+			optimal_mixture_ratio = 14.75/1.0;
+			optimal_burn_time_base	= 0.00305;
+			optimal_burn_time_offset= 0.00075;
+			minComp = 9.25;
+			maxComp = 18.0;
 		}
 		else
 		if (ft == FT_METHANOL)
 		{
 //			System.log("  fuel type: racing methanol");
-			H = 1400000.0;
-			optimal_mixture_ratio = 16.0/1.0;
-			optimal_burn_time_base	= 0.00225;
-			optimal_burn_time_offset= 0.00040;
+			H = 1451340.0;
+			optimal_mixture_ratio = 11.0/1.0;
+			optimal_burn_time_base	= 0.00310;
+			optimal_burn_time_offset= 0.00060;
+			minComp = 9.5;
+			maxComp = 18.0;
 		}
 		else
 		if (ft == FT_DIESEL)
 		{
 //			System.log("  fuel type: diesel oil");
-			H = 1600000.0;
-			optimal_mixture_ratio = 11.0/1.0;
-			optimal_burn_time_base	= 0.00340;
-			optimal_burn_time_offset= 0.00030;
+			H = 1168968.0;
+			optimal_mixture_ratio = 14.5/1.0;
+			optimal_burn_time_base	= 0.00390;
+			optimal_burn_time_offset= 0.00052;
+			minComp = 14.0;
+			maxComp = 23.0;
 		}
 		
 		float ratio = clampTo(getMixtureRatio(), 8.0, 20.0);
@@ -143,8 +167,6 @@ public class AirFuelDeliverySystem extends EnginePart
  		mixture_H = H*(0.8+0.2*(1.0-ratio_detuning_ratio))*1.55;
 		time_burn = (optimal_burn_time_base+optimal_burn_time_offset*ratio_detuning_ratio)*0.25;
 
-		minComp = mixture_H/250000.0;
-		maxComp = mixture_H/100000.0;
 
 //		System.log("     minComp = "+minComp);
 //		System.log("     maxComp = "+maxComp);
@@ -171,8 +193,11 @@ public class AirFuelDeliverySystem extends EnginePart
 		if (fuel_type == FT_GAS_100)
 			return "100 octane premium gas";
 		else
+		if (fuel_type == FT_E85)
+			return "ethanol E85";
+		else
 		if (fuel_type == FT_METHANOL)
-			return "racing methanol";
+			return "112 octane racing methanol";
 		else
 		if (fuel_type == FT_DIESEL)
 			return "diesel oil";

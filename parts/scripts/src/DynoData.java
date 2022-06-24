@@ -259,8 +259,8 @@ public class DynoData extends Native
 		rpm_turbo_mul        = (one.rpm_turbo_mul        + other.rpm_turbo_mul)*0.5;
 		rpm_turbo_opt        = (one.rpm_turbo_opt        + other.rpm_turbo_opt)*0.5;
 		rpm_turbo_range      = (one.rpm_turbo_range      + other.rpm_turbo_range)*0.5;
-		P_turbo_max          = (one.P_turbo_max          + other.P_turbo_max)*0.5;
-		P_turbo_waste        = (one.P_turbo_waste        + other.P_turbo_waste)*0.5;
+		P_turbo_max          = (one.P_turbo_max          + other.P_turbo_max);
+		P_turbo_waste        = (one.P_turbo_waste        + other.P_turbo_waste);
 		nitro_H		     = (one.nitro_H              + other.nitro_H)*0.5;
 		nitro_cooling        = (one.nitro_cooling        + other.nitro_cooling)*0.5;
 		nitro_consumption    = (one.nitro_consumption    + other.nitro_consumption)*0.5;
@@ -362,4 +362,24 @@ public class DynoData extends Native
 	public native float calcDyno( float tablesize );
 	public native float getTorque( float RPM, float nitro );
 	public native float getHP( float RPM, float nitro );
+	
+	// Gorgoil: New formula to get the correct HP value
+	// can be used to get the max HP of the car by using the DynoData RPM_maxHP code for the RPM 
+	// or can be used to call the HP at any RPM wanted just by inserting the wanted RPM
+	
+	public float getRealHP(float RPM)
+	{
+		float poweratrpm;
+		float torque;
+		
+		if(maxHP > 0.0)
+		{
+			torque = getTorque(RPM, 0.0) * 0.7376;
+			poweratrpm = (torque*RPM)/5252.0;
+		}
+		else
+		{ poweratrpm = 0.0; }
+	
+		return poweratrpm;
+	}
 }

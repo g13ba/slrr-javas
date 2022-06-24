@@ -349,10 +349,10 @@ public class Block extends EnginePart
 			return "it's missing the transmission.";
 
 		if (dynodata.Compression < dynodata.minCompression)
-			return "the static compression is too low in the engine. At least "+Float.toString(dynodata.minCompression, "%1.1f:1")+" is needed. Try adjusting the air/fuel mixture ratio or lowering the compression by replacing cylinder head(s), connecting rods or pistons.";
+			return "the static compression ratio is too low. Try raising the compression ratio by replacing cylinder head(s), connecting rods or pistons. To run " + dynodata.fuelType + " you need a compression ratio higher than " +Float.toString(dynodata.minCompression, "%1.1f:1") + ".";
 
 		if (dynodata.Compression > dynodata.maxCompression)
-			return "the static compression is too high in the engine. Not more than "+Float.toString(dynodata.maxCompression, "%1.1f:1")+" is allowed. Try adjusting the air/fuel mixture ratio or lowering the compression by replacing cylinder head(s), connecting rods or pistons.";
+			return "the static compression ratio is too high. Try lowering the compression ratio by replacing cylinder head(s), connecting rods or pistons. To run " + dynodata.fuelType + " compression ratio cannot be higher than " +Float.toString(dynodata.maxCompression, "%1.1f:1") + ".";
 
 		return super.isDynoable();
 	}
