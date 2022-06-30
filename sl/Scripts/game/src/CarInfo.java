@@ -675,8 +675,11 @@ public class CarInfo extends GameType implements GameState
 				}
 
 				// osd.createText( "RunFile_" + Float.toString(Math.random()*999, "%1.0f") + ".drf", graphFont, Text.ALIGN_LEFT, -0.255, -0.55, 0);
-				osd.createText( "Max Torque = " + Float.toString(dyno.maxTorque*0.7353, "%1.2f lb-ft / ") + Float.toString(dyno.maxTorque, "%1.2f Nm"), Frontend.smallFont, Text.ALIGN_LEFT, -0.07, -0.55, 0);
-				osd.createText( "Max Power = " + Float.toString((((dyno.getTorque(dyno.RPM_maxHP, 0.0) * 0.7376)*dyno.RPM_maxHP)/5252.0), "%1.2f HP / ") + Float.toString((((dyno.getTorque(dyno.RPM_maxHP, 0.0) * 0.7376)*dyno.RPM_maxHP)/5252.0*0.7457), "%1.2f Kw"), Frontend.smallFont, Text.ALIGN_LEFT, -0.07, -0.50, 0);
+				val = dyno.RPM_maxTorque;
+				osd.createText( "Max Torque = " + Float.toString(dyno.maxTorque*0.7353, "%1.2f lb-ft / ") + Float.toString(dyno.maxTorque, "%1.2f Nm") +" at "+val+" RPM", Frontend.smallFont, Text.ALIGN_LEFT, -0.07, -0.55, 0);
+				val = dyno.RPM_maxHP;
+				fval = ((dyno.getTorque(dyno.RPM_maxHP, 0.0) * 0.7376)*dyno.RPM_maxHP)/5252.0;
+				osd.createText( "Max Power = " + Float.toString(fval, "%1.2f HP / ") + Float.toString(fval*0.7457, "%1.2f Kw") +" at "+val+" RPM", Frontend.smallFont, Text.ALIGN_LEFT, -0.07, -0.50, 0);
 
 				//value marks
 				for (i = 1; i <= 6; i++)
