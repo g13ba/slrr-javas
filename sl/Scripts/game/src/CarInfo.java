@@ -457,7 +457,7 @@ public class CarInfo extends GameType implements GameState
 
 			osd.createText( "Engine specifications:", Frontend.smallFont, Text.ALIGN_LEFT, xpos, ypos, line).changeColor(0xFFFF2020);line++;
 			line++;
-			line++;
+			
 			val = dyno.cylinders;
 			nvalves = (itkvalves+exhvalves)*dyno.cylinders;
 			osd.createText( "Engine Type:", Frontend.smallFont, Text.ALIGN_LEFT, xpos, ypos, line);
@@ -578,7 +578,7 @@ public class CarInfo extends GameType implements GameState
 
 			osd.createText( "Powertrain specifications:", Frontend.smallFont, Text.ALIGN_LEFT, xpos, ypos, line).changeColor(0xFFFF2020); line++;
 			line++;
-			line++;
+			
 			osd.createText( "No. Gears:", Frontend.smallFont, Text.ALIGN_LEFT, xpos, ypos, line);
 			osd.createText( chas.gears, Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line); line++;
 			
@@ -609,7 +609,7 @@ public class CarInfo extends GameType implements GameState
 
 			osd.createText( "Other specifications:", Frontend.smallFont, Text.ALIGN_LEFT, xpos, ypos, line).changeColor(0xFFFF2020);line++;
 			line++;
-			line++;
+			
 			osd.createText( "Power/Displacement Ratio:", Frontend.smallFont, Text.ALIGN_LEFT, xpos, ypos, line);
 			if (error_text)
 				osd.createText( "N/A", Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
