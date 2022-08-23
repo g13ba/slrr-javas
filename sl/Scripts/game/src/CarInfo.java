@@ -425,6 +425,8 @@ public class CarInfo extends GameType implements GameState
 
 		DynoData dyno = null;
 
+		float max_hp_rpm_val, max_hp_val;
+
 		if( engine )
 		{
 			if( car.iteratePartsInit() )
@@ -610,32 +612,36 @@ public class CarInfo extends GameType implements GameState
 			osd.createText( "Other specifications:", Frontend.smallFont, Text.ALIGN_LEFT, xpos, ypos, line).changeColor(0xFFFF2020);line++;
 			line++;
 			
+			if(dyno.RPM_maxHP > dyno.RPM_limit) max_hp_rpm_val = dyno.RPM_limit;
+			else max_hp_rpm_val = dyno.RPM_maxHP;
+			max_hp_val = ((dyno.getTorque(max_hp_rpm_val, 0.0) * 0.7376)*max_hp_rpm_val)/5252.0;
+			
 			osd.createText( "Power/Displacement Ratio:", Frontend.smallFont, Text.ALIGN_LEFT, xpos, ypos, line);
 			if (error_text)
 				osd.createText( "N/A", Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
 			else
-				osd.createText( Float.toString((((dyno.getTorque(dyno.RPM_maxHP, 0.0) * 0.7376)*dyno.RPM_maxHP)/5252.0) / (dyno.Displacement*1000.0), "%1.1f hp/L") + " / " + Float.toString(((((dyno.getTorque(dyno.RPM_maxHP, 0.0) * 0.7376)*dyno.RPM_maxHP)/5252.0) / (dyno.Displacement*1000.0*61.0237))*100, "%1.1f hp/100cui"), Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
+				osd.createText( Float.toString(max_hp_val / (dyno.Displacement*1000.0), "%1.1f hp/L") + " / " + Float.toString((max_hp_val / (dyno.Displacement*1000.0*61.0237))*100, "%1.1f hp/100cui"), Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
 			line++;
 			
 			osd.createText( "Power/Cylinder Ratio:", Frontend.smallFont, Text.ALIGN_LEFT, xpos, ypos, line);
 			if (error_text)
 				osd.createText( "N/A", Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
 			else
-				osd.createText( Float.toString(((((dyno.getTorque(dyno.RPM_maxHP, 0.0) * 0.7376)*dyno.RPM_maxHP)/5252.0)/dyno.cylinders), "%1.1f hp/cylinder"), Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
+				osd.createText( Float.toString((max_hp_val/dyno.cylinders), "%1.1f hp/cylinder"), Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
 			line++;
 			
 			osd.createText( "Weight/Power Ratio:", Frontend.smallFont, Text.ALIGN_LEFT, xpos, ypos, line);
 			if (error_text)
 				osd.createText( "N/A", Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
 			else
-				osd.createText( Float.toString(chas.getMass()/((((dyno.getTorque(dyno.RPM_maxHP, 0.0) * 0.7376)*dyno.RPM_maxHP)/5252.0)), "%1.3f kg/hp") + " / " + Float.toString((chas.getMass()*2.20462)/((((dyno.getTorque(dyno.RPM_maxHP, 0.0) * 0.7376)*dyno.RPM_maxHP)/5252.0)), "%1.3f lbs/hp"), Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
+				osd.createText( Float.toString(chas.getMass()/max_hp_val, "%1.3f kg/hp") + " / " + Float.toString((chas.getMass()*2.20462)/max_hp_val, "%1.3f lbs/hp"), Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
 			line++;
 
 			osd.createText( "Power/Weight Ratio:", Frontend.smallFont, Text.ALIGN_LEFT, xpos, ypos, line);
 			if (error_text)
 				osd.createText( "N/A", Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
 			else
-				osd.createText( Float.toString(((((dyno.getTorque(dyno.RPM_maxHP, 0.0) * 0.7376)*dyno.RPM_maxHP)/5252.0)/chas.getMass()), "%1.3f hp/kg") + " / " + Float.toString(((((dyno.getTorque(dyno.RPM_maxHP, 0.0) * 0.7376)*dyno.RPM_maxHP)/5252.0))/(chas.getMass()*2.20462), "%1.3f hp/lbs"), Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
+				osd.createText( Float.toString(max_hp_val/chas.getMass(), "%1.3f hp/kg") + " / " + Float.toString(max_hp_val/(chas.getMass()*2.20462), "%1.3f hp/lbs"), Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
 
 			line++;
 			
@@ -663,7 +669,7 @@ public class CarInfo extends GameType implements GameState
 				if(dyno.RPM_limit < dyno.maxRPM){graphRPMMax = dyno.RPM_limit;}
 				else{graphRPMMax = dyno.maxRPM;}
 				
-				while (graphHPMax < ((((dyno.getTorque(dyno.RPM_maxHP, 0.0) * 0.7376)*dyno.RPM_maxHP)/5252.0)))
+				while (graphHPMax < max_hp_val)
 				{
 					graphHPMax *= 2;
 					graphTorqueMax *= 2;
@@ -677,9 +683,8 @@ public class CarInfo extends GameType implements GameState
 				// osd.createText( "RunFile_" + Float.toString(Math.random()*999, "%1.0f") + ".drf", graphFont, Text.ALIGN_LEFT, -0.255, -0.55, 0);
 				val = dyno.RPM_maxTorque;
 				osd.createText( "Max Torque = " + Float.toString(dyno.maxTorque*0.7353, "%1.2f lb-ft / ") + Float.toString(dyno.maxTorque, "%1.2f Nm") +" at "+val+" RPM", Frontend.smallFont, Text.ALIGN_LEFT, -0.07, -0.55, 0);
-				val = dyno.RPM_maxHP;
-				fval = ((dyno.getTorque(dyno.RPM_maxHP, 0.0) * 0.7376)*dyno.RPM_maxHP)/5252.0;
-				osd.createText( "Max Power = " + Float.toString(fval, "%1.2f HP / ") + Float.toString(fval*0.7457, "%1.2f Kw") +" at "+val+" RPM", Frontend.smallFont, Text.ALIGN_LEFT, -0.07, -0.50, 0);
+				val = max_hp_rpm_val;
+				osd.createText( "Max Power = " + Float.toString(max_hp_val, "%1.2f HP / ") + Float.toString(max_hp_val*0.7457, "%1.2f Kw") +" at "+val+" RPM", Frontend.smallFont, Text.ALIGN_LEFT, -0.07, -0.50, 0);
 
 				//value marks
 				for (i = 1; i <= 6; i++)
