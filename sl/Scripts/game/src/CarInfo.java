@@ -612,33 +612,32 @@ public class CarInfo extends GameType implements GameState
 			osd.createText( "Other specifications:", Frontend.smallFont, Text.ALIGN_LEFT, xpos, ypos, line).changeColor(0xFFFF2020);line++;
 			line++;
 			
-			if(dyno.RPM_maxHP > dyno.RPM_limit) max_hp_rpm_val = dyno.RPM_limit;
-			else max_hp_rpm_val = dyno.RPM_maxHP;
-			max_hp_val = ((dyno.getTorque(max_hp_rpm_val, 0.0) * 0.7376)*max_hp_rpm_val)/5252.0;
+			max_hp_rpm_val = dyno.getMaxHP_RPM();
+			max_hp_val = dyno.getMaxHP();
 			
 			osd.createText( "Power/Displacement Ratio:", Frontend.smallFont, Text.ALIGN_LEFT, xpos, ypos, line);
-			if (error_text)
+			if (error_text || !max_hp_val)
 				osd.createText( "N/A", Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
 			else
 				osd.createText( Float.toString(max_hp_val / (dyno.Displacement*1000.0), "%1.1f hp/L") + " / " + Float.toString((max_hp_val / (dyno.Displacement*1000.0*61.0237))*100, "%1.1f hp/100cui"), Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
 			line++;
 			
 			osd.createText( "Power/Cylinder Ratio:", Frontend.smallFont, Text.ALIGN_LEFT, xpos, ypos, line);
-			if (error_text)
+			if (error_text || !max_hp_val)
 				osd.createText( "N/A", Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
 			else
 				osd.createText( Float.toString((max_hp_val/dyno.cylinders), "%1.1f hp/cylinder"), Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
 			line++;
 			
 			osd.createText( "Weight/Power Ratio:", Frontend.smallFont, Text.ALIGN_LEFT, xpos, ypos, line);
-			if (error_text)
+			if (error_text || !max_hp_val)
 				osd.createText( "N/A", Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
 			else
 				osd.createText( Float.toString(chas.getMass()/max_hp_val, "%1.3f kg/hp") + " / " + Float.toString((chas.getMass()*2.20462)/max_hp_val, "%1.3f lbs/hp"), Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
 			line++;
 
 			osd.createText( "Power/Weight Ratio:", Frontend.smallFont, Text.ALIGN_LEFT, xpos, ypos, line);
-			if (error_text)
+			if (error_text || !max_hp_val)
 				osd.createText( "N/A", Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);
 			else
 				osd.createText( Float.toString(max_hp_val/chas.getMass(), "%1.3f hp/kg") + " / " + Float.toString(max_hp_val/(chas.getMass()*2.20462), "%1.3f hp/lbs"), Frontend.smallFont, Text.ALIGN_LEFT, xpos2, ypos, line);

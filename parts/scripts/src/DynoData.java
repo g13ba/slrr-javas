@@ -382,4 +382,19 @@ public class DynoData extends Native
 	
 		return poweratrpm;
 	}
+	
+	// g13ba: max hp rpm patch and simpler way to get max hp
+	// RPM_maxHP can be greater than RPM_limit, and thus would cause getTorque to return 0
+	public float getMaxHP_RPM()
+	{
+		float RPM = RPM_maxHP;
+		if(RPM_maxHP > RPM_limit) RPM = RPM_limit;
+		
+		return RPM;
+	}
+	
+	public float getMaxHP()
+	{
+		return getRealHP(getMaxHP_RPM());
+	}
 }
