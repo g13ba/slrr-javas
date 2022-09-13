@@ -713,7 +713,7 @@ public class CarInfo extends GameType implements GameState
 				RPM = graphRPMMin + 1000.0;
 				while(RPM<=graphRPMMax)
 				{
-					hp = (((dyno.getTorque(RPM, 0.0) * 0.7376)*RPM)/5252.0); //Gorgoil: Real  horsepower calculation	//HP  (kW*1.341)
+					hp = dyno.getRealHP(RPM); //Gorgoil: Real horsepower calculation	//HP (kW*1.341)
 					if(hp<0) hp=0; //RAXAT: v2.3.1, sub-zero values patch
 					gx = graphX+(RPM-graphRPMMin)/(graphRPMMax-graphRPMMin)*graphW;
 					gy = graphY-(hp-graphHPMin)/(graphHPMax-graphHPMin)*graphH - fontCenter;
